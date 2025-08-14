@@ -1,0 +1,132 @@
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  /* background: #f7f8fc; */
+  /* background-color: #768da4; */
+  background-color: #060606;
+  margin: 0;
+}
+
+header {
+  background: #27296d;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+}
+
+h1, h2 {
+  margin: 0 0 10px 0;
+}
+#login-section {
+  margin-top: 12%;
+}
+
+#new-work-section {
+  margin-right: 50px;
+}
+#work-list-section {
+    margin-right: 50px;
+
+}
+#work-detail-section {
+    margin-right: 50px;
+}
+
+.card {
+  max-width: 550px;
+  /* background: #fff; */
+  background-color: #8ab6db;
+  margin: 40px auto;
+  padding: 25px 30px;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+}
+
+input[type="text"], input[type="email"], input[type="password"], input[type="date"], input[type="number"] {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 9px 12px;
+  border: 1.5px solid #27296d;
+  border-radius: 5px;
+}
+
+button {
+  background: #27296d;
+  color: #fff;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+button:hover { background: #524fa1; }
+
+.hidden { display: none; }
+
+.attendance-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+.present { color: green; font-weight: bold;}
+.absent { color: #e30808;  font-weight: bold;}
+.report-section { background: #f3f2ff; padding: 20px; margin: 10px 0; border-radius: 8px;}
+
+
+
+.attendance-row button {
+  background: #e26168;
+  border: none;
+  color: #fff;
+  padding: 3px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+.attendance-row button:hover { background: #c0392b;}
+
+
+
+.greeting {
+  position: absolute;
+  top: 40%;
+   left: 20px;
+  min-width: 200px;
+  font-size: 3.0rem;
+  font-weight: bold;
+  background: none;
+  /* for animation */
+  opacity: 0;
+  transform: translateX(-70px);
+  z-index: 2;
+
+ /* gradient text */
+  /* background: linear-gradient(90deg, #1b06bc 30%, #060606 100%); */
+    background: linear-gradient(90deg, #6d5fd8 30%, #0517e6 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  /* text-fill-color: transparent; */
+
+  /* initial animation state */
+  opacity: 0;
+  transform: translateX(-100px);
+  transition: opacity 0.8s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  user-select: none;
+}
+
+.greeting.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+#new-work-section.card {
+  position: relative;
+}
+

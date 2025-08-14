@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Labour Work Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="login-section" class="card">
+    <h2>Login</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password (optional)" />
+    <button onclick="login()">Login</button>
+  </div>
+
+  <div id="main-section" class="hidden">
+    <header>
+      <h1>Labour Work Tracker</h1>
+      <button onclick="logout()">Logout</button>
+    </header>
+
+    <div id="new-work-section" class="card">
+      <h2>Add New Work</h2>
+      <input type="text" id="workerName" placeholder="Your Name" required />
+      <input type="text" id="ownerName" placeholder="Owner Name" required />
+      <input type="text" id="address" placeholder="Owner Address" required />
+      <input type="date" id="startDate" required />
+      <input type="number" id="pricePerDay" placeholder="Price per Day" required min="0" />
+      <button onclick="addWork()">Create Work Session</button>
+    </div>
+
+    <div id="greeting" class="greeting hidden"></div>
+
+    <div id="work-list-section" class="card">
+      <h2>All Work Schedules</h2>
+      <div id="workList"></div>
+    </div>
+
+    <div id="work-detail-section" class="card hidden">
+      <button onclick="closeWorkDetail()">Back to All Schedules</button>
+      <div id="workDetail"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
