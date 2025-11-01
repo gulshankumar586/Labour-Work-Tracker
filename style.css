@@ -2,7 +2,8 @@ body {
   font-family: 'Segoe UI', Arial, sans-serif;
   /* background: #f7f8fc; */
   /* background-color: #768da4; */
-  background-color: #060606;
+  /* background-color: #060606; */
+  background-color: white;
   margin: 0;
 }
 
@@ -95,9 +96,9 @@ button:hover { background: #524fa1; }
 .greeting {
   position: absolute;
   top: 40%;
-   left: 20px;
+  left: 20px;
   min-width: 200px;
-  font-size: 3.0rem;
+  font-size: 2rem;
   font-weight: bold;
   background: none;
   /* for animation */
