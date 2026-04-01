@@ -1,49 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Labour Work Tracker</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div id="login-section" class="card">
-    <h2>Login</h2>
-    <input type="email" id="email" placeholder="Email" required />
-    <input type="password" id="password" placeholder="Password (optional)" />
-    <button onclick="login()">Login</button>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorkLedger — Labour Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="style.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+
+
+<div class="app">
+
+  <!-- ═══ AUTH SCREEN ═══ -->
+  <div id="auth-screen">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <div class="auth-logo-mark">WL</div>
+        <div class="auth-logo-text">Work<span>Ledger</span></div>
+      </div>
+      <h1 class="auth-heading" id="auth-heading">Welcome back</h1>
+      <p class="auth-sub" id="auth-sub">Sign in to manage your work sessions</p>
+
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchAuthTab('login')">Sign in</button>
+        <button class="tab-btn" onclick="switchAuthTab('register')">Create account</button>
+      </div>
+
+      <!-- Login -->
+      <div id="login-form">
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input class="form-input" type="email" id="login-email" placeholder="you@example.com" autocomplete="email">
+          <div class="form-error hidden" id="login-email-err"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password">
+          <div class="form-error hidden" id="login-pass-err"></div>
+        </div>
+        <div class="form-error hidden" id="login-err" style="margin-bottom:12px;"></div>
+        <button class="btn btn-primary btn-full" onclick="handleLogin()">Sign in</button>
+        <p class="form-note">No account? <a onclick="switchAuthTab('register')">Create one free</a></p>
+      </div>
+
+      <!-- Register -->
+      <div id="register-form" class="hidden">
+        <div class="form-group">
+          <label class="form-label">Full name</label>
+          <input class="form-input" type="text" id="reg-name" placeholder="Your full name">
+          <div class="form-error hidden" id="reg-name-err"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email address</label>
+          <input class="form-input" type="email" id="reg-email" placeholder="you@example.com" autocomplete="email">
+          <div class="form-error hidden" id="reg-email-err"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" id="reg-pass" placeholder="Min 6 characters">
+          <div class="form-error hidden" id="reg-pass-err"></div>
+        </div>
+        <div class="form-error hidden" id="reg-err" style="margin-bottom:12px;"></div>
+        <button class="btn btn-primary btn-full" onclick="handleRegister()">Create account</button>
+        <p class="form-note">Already registered? <a onclick="switchAuthTab('login')">Sign in</a></p>
+      </div>
+    </div>
   </div>
 
-  <div id="main-section" class="hidden">
-    <header>
-      <h1>Labour Work Tracker</h1>
-      <button onclick="logout()">Logout</button>
-    </header>
+  <!-- ═══ APP SCREEN ═══ -->
+  <div id="app-screen" class="hidden">
 
-    <div id="new-work-section" class="card">
-      <h2>Add New Work</h2>
-      <input type="text" id="workerName" placeholder="Your Name" required />
-      <input type="text" id="ownerName" placeholder="Owner Name" required />
-      <input type="text" id="address" placeholder="Owner Address" required />
-      <input type="date" id="startDate" required />
-      <input type="number" id="pricePerDay" placeholder="Price per Day" required min="0" />
-      <button onclick="addWork()">Create Work Session</button>
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="top-bar-brand" onclick="showSection('list')">
+        <div class="brand-mark">WL</div>
+        WorkLedger
+      </div>
+      <div class="top-bar-right">
+        <div class="user-pill">
+          <div class="user-avatar" id="user-avatar">?</div>
+          <span id="user-name-display">User</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Sign out</button>
+      </div>
     </div>
 
-    <div id="greeting" class="greeting hidden"></div>
+    <!-- Main Content -->
+    <div class="main-content">
 
-    <div id="work-list-section" class="card">
-      <h2>All Work Schedules</h2>
-      <div id="workList"></div>
-    </div>
+      <!-- ── Work List Section ── -->
+      <div id="section-list" class="section-animate">
+        <div id="greeting-banner" class="greeting-banner">
+          <div class="greeting-avatar" id="greeting-avatar">?</div>
+          <div class="greeting-text">
+            <div class="greeting-hi" id="greeting-hi">Good morning!</div>
+            <div class="greeting-sub" id="greeting-sub">You have no active sessions</div>
+          </div>
+        </div>
+        <div class="section-header">
+          <div>
+            <div class="section-title">Work Sessions</div>
+            <div class="section-sub" id="session-count-sub">Track and manage your labour engagements</div>
+          </div>
+          <button class="btn btn-primary" onclick="showSection('new')">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg>
+            New Session
+          </button>
+        </div>
+        <div id="works-list" class="works-grid"></div>
+      </div>
 
-    <div id="work-detail-section" class="card hidden">
-      <button onclick="closeWorkDetail()">Back to All Schedules</button>
-      <div id="workDetail"></div>
+      <!-- ── New Work Section ── -->
+      <div id="section-new" class="hidden section-animate">
+        <div class="breadcrumb">
+          <span class="breadcrumb-link" onclick="showSection('list')">Work Sessions</span>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current">New Session</span>
+        </div>
+        <div class="section-header">
+          <div>
+            <div class="section-title">New Work Session</div>
+            <div class="section-sub">Fill in the details to start tracking</div>
+          </div>
+        </div>
+        <div class="modal" style="max-width:100%; margin:0; box-shadow:var(--shadow-card); border:1px solid var(--border);">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Worker Name</label>
+              <input class="form-input" type="text" id="new-worker" placeholder="e.g. Rajan Kumar">
+              <div class="form-error hidden" id="new-worker-err"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Owner / Employer Name</label>
+              <input class="form-input" type="text" id="new-owner" placeholder="e.g. Suresh Builders">
+              <div class="form-error hidden" id="new-owner-err"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Work Location / Address</label>
+            <input class="form-input" type="text" id="new-address" placeholder="e.g. 45 Main Road, Kollam">
+            <div class="form-error hidden" id="new-address-err"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Start Date</label>
+              <input class="form-input" type="date" id="new-start">
+              <div class="form-error hidden" id="new-start-err"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price Per Day (₹)</label>
+              <input class="form-input" type="number" id="new-price" placeholder="e.g. 800" min="1">
+              <div class="form-error hidden" id="new-price-err"></div>
+            </div>
+          </div>
+          <div class="modal-footer" style="border:none; padding-top: 0; margin-top: 0.5rem;">
+            <button class="btn btn-ghost" onclick="showSection('list')">Cancel</button>
+            <button class="btn btn-primary" onclick="createWork()">Create Session</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Work Detail Section ── -->
+      <div id="section-detail" class="hidden section-animate">
+        <div class="breadcrumb">
+          <span class="breadcrumb-link" onclick="showSection('list')">Work Sessions</span>
+          <span class="breadcrumb-sep">›</span>
+          <span class="breadcrumb-current" id="detail-breadcrumb">Session</span>
+        </div>
+
+        <!-- Hero Card -->
+        <div class="detail-hero">
+          <div class="detail-hero-top">
+            <div>
+              <div id="detail-name" class="detail-name"></div>
+              <div class="detail-meta">
+                <div class="detail-meta-item">Owner: <strong id="detail-owner"></strong></div>
+                <div class="detail-meta-item">Location: <strong id="detail-address"></strong></div>
+                <div class="detail-meta-item">Started: <strong id="detail-start"></strong></div>
+                <div class="detail-meta-item">Rate: <strong id="detail-price"></strong>/day</div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+              <span class="badge" id="detail-status-badge"></span>
+            </div>
+          </div>
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-val" id="stat-days">0</div>
+              <div class="stat-label">Total Days</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val success" id="stat-present">0</div>
+              <div class="stat-label">Present</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val danger" id="stat-absent">0</div>
+              <div class="stat-label">Absent</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val accent" id="stat-earnings">₹0</div>
+              <div class="stat-label">Earnings</div>
+            </div>
+          </div>
+
+          <!-- Action buttons -->
+          <div id="detail-actions" class="action-group" style="margin-top:1.25rem;"></div>
+        </div>
+
+        <!-- Completed Report -->
+        <div id="report-section" class="hidden">
+          <div class="report-card">
+            <div class="report-label">Total Earnings</div>
+            <div class="report-amount"><span class="report-currency">₹</span><span id="report-amount">0</span></div>
+            <div class="report-period" id="report-period"></div>
+            <div class="report-stats">
+              <div class="report-stat-item">
+                <div class="report-stat-val" id="report-present">0</div>
+                <div class="report-stat-label">Present Days</div>
+              </div>
+              <div class="report-stat-item">
+                <div class="report-stat-val" id="report-absent">0</div>
+                <div class="report-stat-label">Absent Days</div>
+              </div>
+              <div class="report-stat-item">
+                <div class="report-stat-val" id="report-rate">₹0</div>
+                <div class="report-stat-label">Daily Rate</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendance Section -->
+        <div class="attendance-section">
+          <div class="attendance-header">
+            <div class="attendance-title">Attendance Log</div>
+            <div id="attendance-count-badge"></div>
+          </div>
+
+          <!-- Add Attendance Row -->
+          <div id="add-attendance-row" class="attendance-add">
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input class="form-input" type="date" id="att-date">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-input" id="att-status">
+                <option value="present">Present</option>
+                <option value="absent">Absent</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="addAttendance()" style="white-space:nowrap;">Add Entry</button>
+          </div>
+
+          <div id="attendance-list" class="attendance-list"></div>
+        </div>
+      </div>
+
+    </div><!-- /main-content -->
+  </div><!-- /app-screen -->
+
+  <!-- ═══ MODALS ═══ -->
+  <!-- Complete Work Modal -->
+  <div id="modal-complete" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Complete Work Session?</div>
+        <div class="modal-sub">This will mark the session as finished. You can still view the report but won't be able to add attendance.</div>
+      </div>
+      <div id="complete-preview" style="background:var(--surface-inset); border-radius:var(--radius-md); padding:1rem;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--ink-muted); font-size:13px;">Present Days</span>
+          <span style="font-weight:500; font-size:13px;" id="cp-present">0</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+          <span style="color:var(--ink-muted); font-size:13px;">Absent Days</span>
+          <span style="font-weight:500; font-size:13px;" id="cp-absent">0</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); padding-top:8px; margin-top:4px;">
+          <span style="font-weight:600; font-size:14px;">Total Earnings</span>
+          <span style="font-weight:700; font-size:16px; color:var(--accent);" id="cp-earnings">₹0</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-complete')">Cancel</button>
+        <button class="btn btn-success" onclick="confirmComplete()">Complete Session</button>
+      </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <!-- Delete Work Modal -->
+  <div id="modal-delete" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Delete Session?</div>
+        <div class="modal-sub">This action cannot be undone. All attendance records will be permanently deleted.</div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Cancel</button>
+        <button class="btn btn-danger" onclick="confirmDelete()">Delete Session</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toast-container"></div>
+
+</div><!-- /app -->
+<script src="app.js" defer></script>
+
 </body>
 </html>
-
